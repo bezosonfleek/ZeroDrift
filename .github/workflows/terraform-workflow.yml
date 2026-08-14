@@ -27,6 +27,24 @@ jobs:
       with:
         terraform_version: "1.7.0"
 
+    - name: Validate Secret Configuration
+      run: |
+        echo "=== Checking AWS_ACCESS_KEY ==="
+        if [ -z "${{ secrets.AWS_ACCESS_KEY }}" ]; then
+          echo "❌ ERROR: 'AWS_ACCESS_KEY' is empty or not found!"
+        else
+          LEN=$(echo -n "${{ secrets.AWS_ACCESS_KEY }}" | wc -m)
+          echo "✅ 'AWS_ACCESS_KEY' exists. Length: $LEN characters (Standard AWS ID is 20)."
+        fi
+
+        echo "=== Checking AWS_SECRET_ACCESS_KEY ==="
+        if [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]; then
+          echo "❌ ERROR: 'AWS_SECRET_ACCESS_KEY' is empty or not found!"
+        else
+          LEN=$(echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" | wc -m)
+          echo "✅ 'AWS_SECRET_ACCESS_KEY' exists. Length: $LEN characters (Standard Secret is 40)."
+        fi
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -67,7 +85,7 @@ jobs:
           });
 
     - name: Fail if Plan Failed
-      if: github.event_name == 'pull_request' && steps.plan.outcome == 'failure'
+      if: always() && github.event_name == 'pull_request' && steps.plan.outcome == 'failure'
       run: exit 1
 
     - name: Terraform Apply
