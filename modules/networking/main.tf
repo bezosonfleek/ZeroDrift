@@ -6,15 +6,15 @@ resource "aws_vpc" "zero-drift-vpc" {
 }
 
 resource "aws_subnet" "zero-drift-pub-subnet" {
-  vpc_id     = aws_vpc.zero-drift-vpc.id
-  cidr_block = var.public_subnet_cidr
+  vpc_id            = aws_vpc.zero-drift-vpc.id
+  cidr_block        = var.public_subnet_cidr
   availability_zone = var.availability_zone
 }
 
 resource "aws_internet_gateway" "zero-drift-ig" {
   vpc_id = aws_vpc.zero-drift-vpc.id
   tags = {
-    Name   = "${var.project_name}-ig"  
+    Name = "${var.project_name}-ig"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_route_table" "zero-drift-rt" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.zero-drift-ig.id
   }
-  
+
   tags = {
     Name = "${var.project_name}-rt"
   }
@@ -36,20 +36,20 @@ resource "aws_route_table_association" "zero-drift-rta" {
 }
 
 resource "aws_security_group" "zero-drift-sg" {
-  name = "${var.project_name}-sg"
+  name   = "${var.project_name}-sg"
   vpc_id = aws_vpc.zero-drift-vpc.id
 
   ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = var.allowed_ips
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }   
+  }
 }
