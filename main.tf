@@ -28,5 +28,3 @@ module "compute" {
   subnet_id = module.networking.subnet_id
   zero_drift_public_ssh_key = var.zero_drift_public_ssh_key
 }
-
-
