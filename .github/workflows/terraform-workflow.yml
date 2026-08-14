@@ -12,11 +12,11 @@ on:
 
 permissions:
   contents: read
-  pull_request: write  
+  pull_request: write
 
 jobs:
   terraform:
-  runs-on: ubuntu-latest
+  runs-on: ubuntu-24.04
 
   steps:
   - name: Checkout code
@@ -26,14 +26,14 @@ jobs:
     uses: hashicorp/setup-terraform@v3
     with:
       terraform_version: "1.7.0"
-    
+
   - name: Configure AWS credentials
     uses: aws-actions/configure-aws-credentials@v4
     with:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       aws-region: us-east-1
-  
+
   - name: Terraform Format checkout
     run: terraform fmt -check -recursive
 
@@ -65,7 +65,7 @@ jobs:
         repo: context.repo.repo,
         body: output
         });
-    
+
   - name: Fail if Plan Failed
     if: github.event_name == 'pull_request' && steps.plan.outcome == 'failure'
     run: exit 1
