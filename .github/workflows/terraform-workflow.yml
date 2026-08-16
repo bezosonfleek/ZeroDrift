@@ -46,7 +46,7 @@ jobs:
     - name: Terraform Plan
       if: github.event_name == 'pull_request'
       id: plan
-      run: terraform plan -no-color -out=tfplan
+      run: terraform plan -input=false -no-color -out=tfplan
       continue-on-error: true
 
     - name: Post plan to PR
