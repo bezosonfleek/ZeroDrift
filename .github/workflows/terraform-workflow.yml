@@ -17,7 +17,7 @@ permissions:
 jobs:
   terraform:
     env:
-      TF_VAR_zero_drift_public_ssh_key: ${{ secrets.TF_VAR_ZERO_DRIFT_PUBLIC_SSH_KEY }}
+      TF_VAR_zero_drift_public_ssh_key: ${{ secrets.ZERO_DRIFT_PUBLIC_SSH_KEY }}
     runs-on: ubuntu-24.04
 
     steps:
